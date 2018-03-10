@@ -1,59 +1,29 @@
-const mongoose = require('mongoose');
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
 
-mongoose
-  .connect('mongodb://localhost/TodoApp')
-  .then(() => console.log('MongoDB connected....'))
-  .catch(err => console.log(err));
+//requiring files
+const { mongoose } = require('./config/mongoose');
+const { Todo } = require('./models/Todo');
+const { User } = require('./models/User');
 
-// const Todo = mongoose.model('Todo', {
-//   text: {
-//     type: String,
-//     required: true,
-//     minlength: 1,
-//     trim: true
-//   },
-//   completed: {
-//     type: Boolean,
-//     default: false
-//   },
-//   completedAt: {
-//     type: Number,
-//     default: null
-//   }
-// });
+//Body Parser middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-// // const newTodo = new Todo({
-// //   text: 'Cook dinner'
-// // });
-
-// // newTodo
-// //   .save()
-// //   .then(doc => console.log(`Saved todo: ${doc}`))
-// //   .catch(err => console.log('err'));
-
-// const otherTodo = new Todo({
-//   text: true
-// });
-
-// otherTodo
-//   .save()
-//   .then(doc => console.log(`Saved todo: ${doc}`))
-//   .catch(err => console.log(err));
-
-const Users = mongoose.model('Users', {
-  email: {
-    type: String,
-    required: true,
-    trim: true,
-    minlength: 1
-  }
+app.post('/todos', (req, res) => {
+  const todo = {
+    text: req.body.text
+  };
+  new Todo(todo)
+    .save()
+    .then(doc => {
+      res.send(doc);
+    })
+    .catch(err => res.status(400).send(err));
 });
 
-const newUser = new Users({
-  email: ' zeeshan@gmail.com  '
+const port = 3000;
+app.listen(port, () => {
+  console.log(`Started on port ${port}`);
 });
-
-newUser
-  .save()
-  .then(user => console.log(`Saved user is: ${user}`))
-  .catch(err => console.log(err));
