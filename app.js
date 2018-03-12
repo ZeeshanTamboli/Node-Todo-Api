@@ -27,3 +27,5 @@ const port = 3000;
 app.listen(port, () => {
   console.log(`Started on port ${port}`);
 });
+
+module.exports = { app }; //Export for app.test.js
