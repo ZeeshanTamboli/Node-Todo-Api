@@ -23,6 +23,15 @@ app.post('/todos', (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
+//List Todos
+app.get('/todos', (req, res) => {
+  Todo.find()
+    .then(todos => {
+      res.send({ todos });
+    })
+    .catch(err => res.status(400).send(err));
+});
+
 const port = 3000;
 app.listen(port, () => {
   console.log(`Started on port ${port}`);
