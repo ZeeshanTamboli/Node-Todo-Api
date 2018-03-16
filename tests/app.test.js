@@ -171,7 +171,7 @@ describe('PATCH /todos/:id', () => {
 
   it('should clear completedAt when todo is not completed', done => {
     const hexId = todos[1]._id.toHexString();
-    const text = 'This should be the new text!!';
+    const text = 'This should be the new text!!!';
 
     request(app)
       .patch(`/todos/${hexId}`)
