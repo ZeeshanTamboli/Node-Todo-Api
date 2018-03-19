@@ -8,6 +8,7 @@ const { ObjectID } = require('mongodb');
 const { mongoose } = require('./config/mongoose');
 const { Todo } = require('./models/Todo');
 const { User } = require('./models/User');
+const { authenticate } = require('./helpers/auth');
 
 //Body Parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -115,6 +116,10 @@ app.post('/users', (req, res) => {
       res.header('x-auth', token).send(user);
     })
     .catch(err => res.status(400).send(err));
+});
+
+app.get('/users/me', authenticate, (req, res) => {
+  res.send(req.user);
 });
 
 const port = 3000;
