@@ -14,9 +14,10 @@ const { authenticate } = require('./helpers/auth');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.post('/todos', (req, res) => {
+app.post('/todos', authenticate, (req, res) => {
   const todo = {
-    text: req.body.text
+    text: req.body.text,
+    _creator: req.user._id
   };
   new Todo(todo)
     .save()
@@ -27,8 +28,10 @@ app.post('/todos', (req, res) => {
 });
 
 //List Todos
-app.get('/todos', (req, res) => {
-  Todo.find()
+app.get('/todos', authenticate, (req, res) => {
+  Todo.find({
+    _creator: req.user._id
+  })
     .then(todos => {
       res.send({ todos });
     })
